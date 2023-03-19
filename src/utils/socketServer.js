@@ -1,13 +1,13 @@
 import { Server as SocketServer } from 'socket.io';
 
-// export let io = null;
-
-export function initSocketServer (server) {
+// inicializar un servidor de socket
+export function initSocketServer (server) { // resive el servidor http
+  // crear una instancia de un servidor socket
   const io = new SocketServer(server, {
     cors: {
       origin: '*'
     }
   });
 
-  return io;
+  return io; // retornar el servidor socket
 }
