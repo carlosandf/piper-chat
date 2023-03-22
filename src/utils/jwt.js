@@ -25,7 +25,7 @@ function createRefreshToken (user) {
   // payload para jwt
   const payload = {
     tokenType: 'refresh',
-    userId: user.id,
+    userId: user._id,
     iat: Date.now(),
     exp: expToken.getTime()
   };
