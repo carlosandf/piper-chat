@@ -4,9 +4,8 @@ import bcrypt from 'bcryptjs';
 
 // registro de usuarios
 async function register (req, res) {
-  const { email, password } = req.body; // obtener credenciales del usuario
-
   try {
+    const { email, password } = req.body; // obtener credenciales del usuario
     const newUser = new User({
       email: email.toLowerCase(), // guardar el email en lower case
       password
@@ -25,10 +24,9 @@ async function register (req, res) {
 
 // inicio de sesión
 async function login (req, res) {
-  const { email, password } = req.body; // obtener credenciales del usuario
-
-  const emailLowerCase = email.toLowerCase(); // pasar el email a lower case
   try {
+    const { email, password } = req.body; // obtener credenciales del usuario
+    const emailLowerCase = email.toLowerCase(); // pasar el email a lower case
     const user = await User.findOne({ email: emailLowerCase }); // obtener el usuario que coincida
 
     const isCorrectPassword =
@@ -60,20 +58,20 @@ async function login (req, res) {
 
 // controlador de refresh access token
 async function refreshAccessToken (req, res) {
-  const { refreshToken } = req.body; // obtener el refreshToken
-
-  if (!refreshToken) { // si no existe devolver la alerta
-    return res.status(400).send({ message: 'Token required' });
-  }
-
-  // devuelve true o false si el refresh token ha expirado o no
-  const hasExpired = jwtServices.hasExpiredToken(refreshToken);
-
-  if (hasExpired) { // si expiró, devolver la alerta
-    return res.status(400).send({ message: 'Token Expired' });
-  }
-
   try {
+    const { refreshToken } = req.body; // obtener el refreshToken
+
+    if (!refreshToken) { // si no existe devolver la alerta
+      return res.status(400).send({ message: 'Token required' });
+    }
+
+    // devuelve true o false si el refresh token ha expirado o no
+    const hasExpired = jwtServices.hasExpiredToken(refreshToken);
+
+    if (hasExpired) { // si expiró, devolver la alerta
+      return res.status(400).send({ message: 'Token Expired' });
+    }
+
     const { userId } = jwtServices.decoded(refreshToken); // obtener el userId del token decodificado
 
     const user = await User.findById(userId); // obtener el usuario cuyo id sea igual a userId
