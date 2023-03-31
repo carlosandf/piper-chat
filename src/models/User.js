@@ -17,7 +17,8 @@ const UserSchema = new Schema({
   },
   avatar: {
     type: String
-  }
+  },
+  id: Schema.Types.ObjectId
 });
 
 UserSchema.set('toJSON', {
