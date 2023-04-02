@@ -96,7 +96,7 @@ async function updateMyUser (req, res) {
   }
 }
 
-export const UserControler = {
+export const UserController = {
   getMe,
   getUsers,
   getOneUser,
