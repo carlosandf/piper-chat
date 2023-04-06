@@ -3,7 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import express from 'express';
 import { initSocketServer } from './utils/index.js';
-import { authRoutes, userRoutes } from './routes/index.js';
+import { authRoutes, userRoutes, chatRoutes } from './routes/index.js';
 // import bodyParser from 'body-parser';
 
 const app = express(); // iniciar una app de express
@@ -33,6 +33,7 @@ app.use(morgan('dev'));
 const baseUrl = '/api/v1';
 app.use(baseUrl, authRoutes);
 app.use(baseUrl, userRoutes);
+app.use(baseUrl, chatRoutes);
 
 // exportar el servidor http y el y el servidor de socket.io
 export { server, io };
