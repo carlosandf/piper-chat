@@ -12,7 +12,7 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true })
       console.log('----------------------------------------------');
       console.log('| Server running                             |');
       console.log('----------------------------------------------');
-      console.log(`| http://${IP_SERVER}:${PORT}/api                  |`);
+      console.log(`| http://${IP_SERVER}:${PORT}/api/v1               |`);
       console.log('----------------------------------------------');
 
       io.on('connection', (socket) => {
