@@ -12,7 +12,7 @@ async function register (req, res) {
     });
 
     const savedUser = await newUser.save(); // obtener el usuario guardado
-    res.status(201).send(savedUser); // reponder con la información del usuario guardado
+    res.status(201).json(savedUser); // reponder con la información del usuario guardado
   } catch (error) {
     // captura de errores y respuesta
     res.status(400).json({
