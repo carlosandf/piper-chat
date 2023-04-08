@@ -15,7 +15,7 @@ async function register (req, res) {
     res.status(201).send(savedUser); // reponder con la información del usuario guardado
   } catch (error) {
     // captura de errores y respuesta
-    res.status(400).send({
+    res.status(400).json({
       message: 'Error al registrar usuario',
       error
     });
@@ -44,12 +44,12 @@ async function login (req, res) {
     }
 
     // si la anterior condición no se cumple, se ejecuta lo siguiente
-    res.status(200).send({
+    res.status(200).json({
       access: jwtServices.createAccessToken(user), // devuelve el access token
       refresh: jwtServices.createRefreshToken(user) // devuelve el regresh token
     });
   } catch (error) { // capturar el error en caso de que exista
-    res.status(500).send({ // responder con el error
+    res.status(500).json({ // responder con el error
       message: 'Error en el servidor',
       error
     });
@@ -62,29 +62,29 @@ async function refreshAccessToken (req, res) {
     const { refreshToken } = req.body; // obtener el refreshToken
 
     if (!refreshToken) { // si no existe devolver la alerta
-      return res.status(400).send({ message: 'Token required' });
+      return res.status(400).json({ message: 'Token required' });
     }
 
     // devuelve true o false si el refresh token ha expirado o no
     const hasExpired = jwtServices.hasExpiredToken(refreshToken);
 
     if (hasExpired) { // si expiró, devolver la alerta
-      return res.status(400).send({ message: 'Token Expired' });
+      return res.status(400).json({ message: 'Token Expired' });
     }
 
     const { userId } = jwtServices.decoded(refreshToken); // obtener el userId del token decodificado
 
     const user = await User.findById(userId); // obtener el usuario cuyo id sea igual a userId
-    if (user === null) return res.status(404).send({ message: 'Not Found' }); // si user es null, retornar un 404
+    if (user === null) return res.status(404).json({ message: 'Not Found' }); // si user es null, retornar un 404
 
     // si user no es null, verificar que la propiedad '_id' exista
     if (user._id) {
-      return res.status(200).send({
+      return res.status(200).json({
         accessToken: jwtServices.createAccessToken(user) // crear nuevo access token y enviarlo en la respuesta
       });
     }
   } catch (error) { // en caso de error, capturarlo y devolverlo con un status 500
-    res.status(500).send({ message: 'Error del servidor' });
+    res.status(500).json({ message: 'Error del servidor' });
   }
 }
 
