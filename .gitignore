@@ -133,8 +133,6 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-src/uploads/avatar/*.png
-
 ### Node Patch ###
 # Serverless Webpack directories
 .webpack/
