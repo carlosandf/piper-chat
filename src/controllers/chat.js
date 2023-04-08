@@ -54,7 +54,18 @@ async function getAll (req, res) {
 }
 
 async function deleteChat (req, res) {
-  res.status(200).send('Hola Mundo');
+  const { id } = req.params;
+
+  try {
+    const deleted = await Chat.findByIdAndDelete(id);
+
+    if (!deleted) throw boom.badRequest('Error al intentar eliminar');
+    res.status(200).json({ message: 'Chat eliminado' });
+  } catch (error) {
+    error.isBoom // preguntar si el error es enviado por Boom
+      ? res.status(error.output.statusCode).json({ error: error.output.payload })
+      : res.status(400).json({ error: error.message });
+  }
 }
 
 export const ChatController = {
