@@ -34,10 +34,17 @@ async function getAll (req, res) {
   const { userId } = req.user;
 
   try {
-    const chats = await Chat.find({
-      $or: [{ member_one: userId }, { member_two: userId }]
-    }).populate(['member_one', 'member_two']).exec();
+    const query = Chat.find({
+      $or: [
+        { member_one: userId },
+        { member_two: userId }
+      ]
+    }).populate(['member_one', 'member_two']);
+
+    const chats = await query.exec();
+
     if (!chats) throw boom.notFound();
+
     res.status(200).json(chats);
   } catch (error) {
     error.isBoom // preguntar si el error es enviado por Boom
