@@ -26,7 +26,7 @@ async function create (req, res) {
     const chatSaved = await chat.save();
     res.status(201).json(chatSaved);
   } catch (error) {
-    res.status(400).send({ message: 'Ha ocurrido un error' });
+    res.status(400).json({ message: 'Ha ocurrido un error' });
   }
 }
 
@@ -38,7 +38,7 @@ async function getAll (req, res) {
       $or: [{ member_one: userId }, { member_two: userId }]
     }).populate(['member_one', 'member_two']).exec();
     if (!chats) throw boom.notFound();
-    res.status(200).send(chats);
+    res.status(200).json(chats);
   } catch (error) {
     error.isBoom // preguntar si el error es enviado por Boom
       ? res.status(error.output.statusCode).json({ error, message: error.message })
