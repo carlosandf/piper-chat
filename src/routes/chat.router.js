@@ -6,6 +6,7 @@ const router = Router();
 
 router.post('/chats', [mdAuth.asureAuth], ChatController.create);
 router.get('/chats', [mdAuth.asureAuth], ChatController.getAll);
+router.get('/chats/:id', [mdAuth.asureAuth], ChatController.getChat);
 router.delete('/chats/:id', [mdAuth.asureAuth], ChatController.deleteChat);
 
 export const chatRoutes = router;

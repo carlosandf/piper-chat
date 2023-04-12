@@ -68,8 +68,21 @@ async function deleteChat (req, res) {
   }
 }
 
+async function getChat (req, res) {
+  const { id } = req.params;
+
+  try {
+    const currentChat = await Chat.findById(id);
+
+    res.status(200).json(currentChat);
+  } catch (error) {
+
+  }
+}
+
 export const ChatController = {
   create,
   getAll,
-  deleteChat
+  deleteChat,
+  getChat
 };
