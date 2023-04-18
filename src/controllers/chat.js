@@ -72,11 +72,14 @@ async function getChat (req, res) {
   const { id } = req.params;
 
   try {
-    const currentChat = await Chat.findById(id);
+    const currentChat = await Chat.findById(id).populate([
+      'member_one',
+      'member_two'
+    ]);
 
     res.status(200).json(currentChat);
   } catch (error) {
-
+    res.status(400).json({ error: error.message });
   }
 }
 
