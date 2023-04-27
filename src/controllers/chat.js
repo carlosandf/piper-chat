@@ -1,4 +1,4 @@
-import { Chat } from '../models/index.js';
+import { Chat, Message } from '../models/index.js';
 import boom from '@hapi/boom';
 
 async function create (req, res) {
@@ -34,18 +34,28 @@ async function getAll (req, res) {
   const { userId } = req.user;
 
   try {
-    const query = Chat.find({
+    const query = Chat.findOne({
       $or: [
         { member_one: userId },
         { member_two: userId }
       ]
     }).populate(['member_one', 'member_two']);
 
-    const chats = await query.exec();
+    const arrayChats = [];
 
-    if (!chats) throw boom.notFound();
+    for await (const chat of query) {
+      const response = await Message.findOne({ chat: chat._id })
+        .sort({ createdAt: -1 });
 
-    res.status(200).json(chats);
+      arrayChats.push({
+        ...chat._doc,
+        last_message_date: response?.createdAt || null
+      });
+    }
+
+    if (!arrayChats) throw boom.notFound();
+
+    res.status(200).json(arrayChats);
   } catch (error) {
     error.isBoom // preguntar si el error es enviado por Boom
       ? res.status(error.output.statusCode).json({ error, message: error.message })
