@@ -79,7 +79,6 @@ async function getTotalMessages (req, res) {
 
 async function getLastMessage (req, res) {
   const { chat_id } = req.params;
-  console.log(chat_id);
   try {
     const response = await Message.findOne({ chat: chat_id })
       .sort({
