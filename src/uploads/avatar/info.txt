@@ -1,0 +1,2 @@
+En este directorio se subira el avatar del usuario
+cuando este decida agregar o cambiar su foto de perfil
