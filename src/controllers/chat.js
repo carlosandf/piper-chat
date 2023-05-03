@@ -34,7 +34,7 @@ async function getAll (req, res) {
   const { userId } = req.user;
 
   try {
-    const query = Chat.findOne({
+    const response = Chat.find({
       $or: [
         { member_one: userId },
         { member_two: userId }
@@ -43,13 +43,13 @@ async function getAll (req, res) {
 
     const arrayChats = [];
 
-    for await (const chat of query) {
-      const response = await Message.findOne({ chat: chat._id })
+    for await (const chat of response) {
+      const message = await Message.findOne({ chat: chat._id })
         .sort({ createdAt: -1 });
 
       arrayChats.push({
         ...chat._doc,
-        last_message_date: response?.createdAt || null
+        last_message_date: message?.createdAt || null
       });
     }
 
