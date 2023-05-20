@@ -23,6 +23,19 @@ async function createGroup (req, res) {
   }
 }
 
+async function getAll (req, res) {
+  const { userIdo } = red.user;
+  try {
+    if (userId) {
+      const groups = await Group.find;
+    }
+  } catch (error) {
+
+  }
+  res.status(200).send('Perfect');
+}
+
 export const GroupControllers = {
-  createGroup
+  createGroup,
+  getAll
 };
