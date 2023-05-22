@@ -24,13 +24,17 @@ async function createGroup (req, res) {
 }
 
 async function getAll (req, res) {
-  const { userIdo } = red.user;
+  const { userId } = req.user;
   try {
     if (userId) {
-      const groups = await Group.find;
+      const groups = await Group.find({ participants: userId })
+        .populate(['creator', 'participants'])
+        .exec();
+
+      res.status(200).json(groups);
     }
   } catch (error) {
-
+    res.status(500).send({ message: 'Error en el servidor', error: error.message });
   }
   res.status(200).send('Perfect');
 }
