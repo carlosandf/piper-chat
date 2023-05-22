@@ -9,5 +9,6 @@ const router = Router();
 
 router.post('/groups', [mdAuth.asureAuth, mdUpload], GroupControllers.createGroup);
 router.get('/groups', [mdAuth.asureAuth], GroupControllers.getAll);
+router.get('/groups/:id', [mdAuth.asureAuth], GroupControllers.getGroup);
 
 export const groupRoutes = router;

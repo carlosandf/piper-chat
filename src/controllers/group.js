@@ -39,7 +39,23 @@ async function getAll (req, res) {
   res.status(200).send('Perfect');
 }
 
+async function getGroup (req, res) {
+  const { id } = req.params;
+
+  try {
+    const group = await Group.findById(id);
+    if (group) {
+      res.status(200).json(group);
+    } else {
+      res.status(400).send({ message: 'No encontrado' });
+    }
+  } catch (error) {
+    res.status(500).send({ message: 'Error en el servidor' });
+  }
+}
+
 export const GroupControllers = {
   createGroup,
+  getGroup,
   getAll
 };
