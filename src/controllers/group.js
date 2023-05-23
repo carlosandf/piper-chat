@@ -36,14 +36,13 @@ async function getAll (req, res) {
   } catch (error) {
     res.status(500).send({ message: 'Error en el servidor', error: error.message });
   }
-  res.status(200).send('Perfect');
 }
 
 async function getGroup (req, res) {
   const { id } = req.params;
 
   try {
-    const group = await Group.findById(id);
+    const group = await Group.findById(id).populate(['participants']);
     if (group) {
       res.status(200).json(group);
     } else {
@@ -54,8 +53,34 @@ async function getGroup (req, res) {
   }
 }
 
+async function updateGroup (req, res) {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    console.log({ body: req.body, img: req.files });
+    const group = await Group.findById(id);
+    if (name) group.name = name;
+    if (req.files.image) {
+      const imagePath = getFilePath(req.files.image);
+      group.image = imagePath;
+    }
+
+    const updatedGroup = await Group.findByIdAndUpdate(id, group);
+
+    if (updatedGroup) {
+      res.status(200).json(updatedGroup);
+    } else {
+      res.status(400).send({ message: 'Ha ocurrido un error' });
+    }
+  } catch (error) {
+    res.status(500).send({ message: 'Error en el servidor', error: error.message });
+  }
+}
+
 export const GroupControllers = {
   createGroup,
+  updateGroup,
   getGroup,
   getAll
 };
