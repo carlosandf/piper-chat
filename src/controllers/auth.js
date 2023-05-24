@@ -51,7 +51,7 @@ async function login (req, res) {
   } catch (error) { // capturar el error en caso de que exista
     res.status(500).json({ // responder con el error
       message: 'Error en el servidor',
-      error
+      error: error.message
     });
   }
 }
