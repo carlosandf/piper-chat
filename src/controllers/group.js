@@ -58,15 +58,15 @@ async function updateGroup (req, res) {
     const { id } = req.params;
     const { name } = req.body;
 
-    console.log({ body: req.body, img: req.files });
+    console.log(req.body);
     const group = await Group.findById(id);
     if (name) group.name = name;
-    if (req.files.image) {
+    if (req.files && req.files.image) { // Verificar si req.files existe antes de acceder a req.files.image
       const imagePath = getFilePath(req.files.image);
       group.image = imagePath;
     }
 
-    const updatedGroup = await Group.findByIdAndUpdate(id, group);
+    const updatedGroup = await Group.findByIdAndUpdate(id, { ...group });
 
     if (updatedGroup) {
       res.status(200).json(updatedGroup);
