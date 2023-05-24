@@ -16,7 +16,6 @@ async function createGroup (req, res) {
       group.image = imagePath;
     }
     const created = await group.save();
-    console.log(created);
     res.status(200).send(created);
   } catch (error) {
     res.status(400).send(error);
@@ -58,15 +57,15 @@ async function updateGroup (req, res) {
     const { id } = req.params;
     const { name } = req.body;
 
-    console.log(req.body);
-    const group = await Group.findById(id);
-    if (name) group.name = name;
-    if (req.files && req.files.image) { // Verificar si req.files existe antes de acceder a req.files.image
-      const imagePath = getFilePath(req.files.image);
-      group.image = imagePath;
-    }
+    const update = {};
 
-    const updatedGroup = await Group.findByIdAndUpdate(id, { ...group });
+    if (req.files && req.files.image) {
+      const imagePath = getFilePath(req.files.image);
+      update.image = imagePath;
+    }
+    if (name) update.name = name;
+
+    const updatedGroup = await Group.findByIdAndUpdate(id, { ...update });
 
     if (updatedGroup) {
       res.status(200).json(updatedGroup);
