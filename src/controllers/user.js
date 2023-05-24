@@ -82,7 +82,6 @@ async function updateMyUser (req, res) {
       // utilizar la función getFilePath para obterner la futa de la imagen del avatar
       const imagePath = getFilePath(req.files.avatar);
       userData.avatar = imagePath; // crear la propiedad avatar, en "userData" y asignarle la ruta de la imagen como valor
-      console.log(imagePath);
     }
     // buscar y acualizar el usuario en la base de datos
     const myUserUpdated = await User.findByIdAndUpdate(userId, userData, { new: true });

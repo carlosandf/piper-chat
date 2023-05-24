@@ -21,7 +21,6 @@ async function sendMessage (req, res) {
 
     res.status(200).json(savedMessage);
   } catch (error) {
-    console.log(error);
     res.status(400).send({ message: 'Ha ocurrido un error', error: error.message });
   }
 }
