@@ -80,7 +80,6 @@ async function updateGroup (req, res) {
 async function exitGroup (req, res) {
   try {
     const { id } = req.params;
-    const { name } = req.body;
     const { userId } = req.user;
 
     const group = await Group.findById(id);
