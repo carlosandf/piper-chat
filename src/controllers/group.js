@@ -77,9 +77,32 @@ async function updateGroup (req, res) {
   }
 }
 
+async function exitGroup (req, res) {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+    const { userId } = req.user;
+
+    const group = await Group.findById(id);
+
+    const upDatePrticipans = group.participants.filter(
+      (participant) => participants.toString !== userId
+    );
+
+    if (group) {
+      res.status(200).json(group);
+    } else {
+      res.status(400).send({ message: 'Ha ocurrido un error' });
+    }
+  } catch (error) {
+    res.status(500).send({ message: 'Error en el servidor', error: error.message });
+  }
+}
+
 export const GroupControllers = {
   createGroup,
   updateGroup,
+  exitGroup,
   getGroup,
   getAll
 };
