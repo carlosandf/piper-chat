@@ -11,6 +11,6 @@ router.post('/groups', [mdAuth.asureAuth, mdUpload], GroupControllers.createGrou
 router.get('/groups', [mdAuth.asureAuth], GroupControllers.getAll);
 router.get('/groups/:id', [mdAuth.asureAuth], GroupControllers.getGroup);
 router.patch('/groups/:id', [mdAuth.asureAuth, mdUpload], GroupControllers.updateGroup);
-router.patch('/groups/:id');
+router.patch('/groups/exit/:id', [mdAuth.asureAuth], GroupControllers.exitGroup);
 
 export const groupRoutes = router;

@@ -9,7 +9,7 @@ async function createGroup (req, res) {
     const group = new Group({
       name,
       participants: [...JSON.parse(participants), userId],
-      creator: userId
+      admin: userId
     });
     if (req.files.image) {
       const imagePath = getFilePath(req.files.image);
@@ -27,7 +27,7 @@ async function getAll (req, res) {
   try {
     if (userId) {
       const groups = await Group.find({ participants: userId })
-        .populate(['creator', 'participants'])
+        .populate(['admin', 'participants'])
         .exec();
 
       res.status(200).json(groups);
@@ -82,14 +82,21 @@ async function exitGroup (req, res) {
     const { id } = req.params;
     const { userId } = req.user;
 
-    const group = await Group.findById(id);
+    const { _doc } = await Group.findById(id);
 
-    const upDatePrticipans = group.participants.filter(
-      (participant) => participants.toString !== userId
+    const updateParticipants = _doc?.participants.filter(
+      (participant) => participant.toString() !== userId
     );
 
-    if (group) {
-      res.status(200).json(group);
+    const newData = {
+      ..._doc,
+      admin: updateParticipants[0],
+      participants: updateParticipants
+    };
+
+    const updated = await Group.findByIdAndUpdate(id, newData);
+    if (updated) {
+      res.status(200).json({ newData });
     } else {
       res.status(400).send({ message: 'Ha ocurrido un error' });
     }
