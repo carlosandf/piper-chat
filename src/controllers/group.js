@@ -105,7 +105,17 @@ async function exitGroup (req, res) {
   }
 }
 
+async function addParticipants (req, res) {
+  const { id } = req.params;
+  const { users_id } = req.body;
+
+  console.log(id);
+  console.log(users_id);
+  res.status(200).send({ users_id });
+}
+
 export const GroupControllers = {
+  addParticipants,
   createGroup,
   updateGroup,
   exitGroup,
