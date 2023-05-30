@@ -1,4 +1,4 @@
-import { Group } from '../models/index.js';
+import { Group, User } from '../models/index.js';
 import { getFilePath } from '../utils/image.js';
 
 async function createGroup (req, res) {
@@ -106,12 +106,42 @@ async function exitGroup (req, res) {
 }
 
 async function addParticipants (req, res) {
-  const { id } = req.params;
-  const { users_id } = req.body;
+  try {
+    const { id } = req.params;
+    const { users_id } = req.body;
 
-  console.log(id);
-  console.log(users_id);
-  res.status(200).send({ users_id });
+    const { _doc } = await Group.findById(id);
+    const users = await User.find({ _id: users_id });
+
+    const newParticipants = [..._doc.participants];
+    users.forEach((user) => {
+      if (!_doc.participants.includes(user._id)) {
+        newParticipants.push(user._id);
+      }
+    });
+
+    const newData = {
+      ..._doc,
+      participants: newParticipants
+    };
+
+    const update = await Group.findByIdAndUpdate(id, newData);
+
+    if (update) {
+      return res.status(200).send({
+        message: 'Todo salió bien'
+      });
+    }
+
+    res.status(400).send({
+      message: 'Ocurrió un error al añadir nuevos miembros'
+    });
+  } catch (error) {
+    res.status(500).send({
+      message: 'Error en el servidor',
+      error: error.message
+    });
+  }
 }
 
 export const GroupControllers = {
