@@ -144,7 +144,34 @@ async function addParticipants (req, res) {
   }
 }
 
+async function removeParticipant (req, res) {
+  const { group_id, user_id } = req.body;
+
+  const group = await Group.findById(group_id);
+
+  const newParticipants = group.participants.filter(
+    participant => participant.toString() !== user_id
+  );
+  const newData = {
+    ...group.$getPopulatedDocs_doc,
+    participants: newParticipants
+  };
+
+  const update = await Group.findByIdAndUpdate(group_id, newData);
+
+  if (update) {
+    return res.status(200).send({
+      message: 'Todo salió bien'
+    });
+  }
+
+  res.status(400).send({
+    message: 'Ocurrió un error al añadir nuevos miembros'
+  });
+}
+
 export const GroupControllers = {
+  removeParticipant,
   addParticipants,
   createGroup,
   updateGroup,
