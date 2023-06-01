@@ -170,8 +170,32 @@ async function removeParticipant (req, res) {
   });
 }
 
+async function getAnotherUsers (req, res) {
+  const { group_id } = req.params;
+
+  try {
+    const group = await Group.findById(group_id);
+    const participantsIds = group.participants.toString().split(',');
+
+    const response = await User.find({ _id: { $nin: participantsIds } });
+
+    if (!response) {
+      return res.status(400).send({
+        message: 'Ha pcorrido un error'
+      });
+    }
+    res.status(200).send(response);
+  } catch (error) {
+    res.status(500).send({
+      message: 'Error en el servidor',
+      error: error.message
+    });
+  }
+}
+
 export const GroupControllers = {
   removeParticipant,
+  getAnotherUsers,
   addParticipants,
   createGroup,
   updateGroup,
