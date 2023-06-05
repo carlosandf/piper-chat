@@ -8,7 +8,8 @@ import {
   userRoutes,
   chatRoutes,
   messageRoutes,
-  groupRoutes
+  groupRoutes,
+  groupMessageRouter
 } from './routes/index.js';
 // import bodyParser from 'body-parser';
 
@@ -42,6 +43,7 @@ app.use(baseUrl, userRoutes);
 app.use(baseUrl, chatRoutes);
 app.use(baseUrl, messageRoutes);
 app.use(baseUrl, groupRoutes);
+app.use(baseUrl, groupMessageRouter);
 
 // exportar el servidor http y el y el servidor de socket.io
 export { server, io };
