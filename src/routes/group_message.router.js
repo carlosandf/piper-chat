@@ -13,4 +13,27 @@ router.post(
   GroupMessageControllers.sendText
 );
 
+router.post(
+  '/group/messages/image',
+  [mdAuth.asureAuth, mdUpload],
+  GroupMessageControllers.sendImage
+);
+
+router.get(
+  '/group/messages/:group_id',
+  [mdAuth.asureAuth],
+  GroupMessageControllers.getAllMessages
+);
+
+router.get(
+  '/group/messages/total/:group_id',
+  [mdAuth.asureAuth],
+  GroupMessageControllers.getTotalMessages
+);
+
+router.get(
+  '/group/messages/last/:group_id',
+  [mdAuth.asureAuth],
+  GroupMessageControllers.getLastMessage
+);
 export const groupMessageRouter = router;
