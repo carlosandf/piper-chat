@@ -1,4 +1,4 @@
-import { Group, User } from '../models/index.js';
+import { Group, GroupMessage, User } from '../models/index.js';
 import { getFilePath } from '../utils/image.js';
 
 async function createGroup (req, res) {
@@ -26,9 +26,20 @@ async function getAll (req, res) {
   const { userId } = req.user;
   try {
     if (userId) {
-      const groups = await Group.find({ participants: userId })
-        .populate(['admin', 'participants'])
-        .exec();
+      const response = Group.find({ participants: userId })
+        .populate(['admin', 'participants']);
+
+      const groups = [];
+
+      for await (const chat of response) {
+        const message = await GroupMessage.findOne({ group: chat._id })
+          .sort({ createdAt: -1 });
+
+        groups.push({
+          ...chat._doc,
+          last_message_date: message?.createdAt || null
+        });
+      }
 
       res.status(200).json(groups);
     }
