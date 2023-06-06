@@ -26,22 +26,22 @@ async function getAll (req, res) {
   const { userId } = req.user;
   try {
     if (userId) {
-      const response = Group.find({ participants: userId })
+      const groupsResponse = Group.find({ participants: userId })
         .populate(['admin', 'participants']);
 
-      const groups = [];
+      const groupsArray = [];
 
-      for await (const chat of response) {
-        const message = await GroupMessage.findOne({ group: chat._id })
+      for await (const group of groupsResponse) {
+        const message = await GroupMessage.findOne({ group: group._id })
           .sort({ createdAt: -1 });
 
-        groups.push({
-          ...chat._doc,
+        groupsArray.push({
+          ...group._doc,
           last_message_date: message?.createdAt || null
         });
       }
 
-      res.status(200).json(groups);
+      res.status(200).json(groupsArray);
     }
   } catch (error) {
     res.status(500).send({ message: 'Error en el servidor', error: error.message });
