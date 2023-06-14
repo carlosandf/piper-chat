@@ -32,10 +32,10 @@ async function login (req, res) {
     const isCorrectPassword =
     user === null // si es true, isCorrectPasswor será false
       ? false
+      : await bcrypt.compare(password, user.password);
       // si user no el null, verificar que la cotraseña coninsida con la registrada
       // si la cintraseña es correcta, isCorrectPassword será true
       // de lo contrario, será false
-      : bcrypt.compareSync(password, user.password);
 
     if (!(user && isCorrectPassword)) { // devolver el error solo si user o isCorrectPasword o ambos son false
       return res.status(401).json({
