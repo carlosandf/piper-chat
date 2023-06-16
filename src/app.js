@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // configure static folder
-app.use(express.static('uploads'));
+app.use(express.static('src/uploads'));
 
 // configure header http - cors
 app.use(cors());
