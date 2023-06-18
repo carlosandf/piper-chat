@@ -1,6 +1,6 @@
 import { User } from '../models/index.js';
 import boom from '@hapi/boom';
-import { getFilePath } from '../utils/image.js';
+// import { getFilePath } from '../utils/image.js';
 
 // funciones del controlador
 
@@ -78,11 +78,11 @@ async function updateMyUser (req, res) {
       verificar si existe la propiedad "files" y a su vez "avatar"
       Estas propiedade son generadas por el middleware de multiparty
     */
-    if (req.files.avatar) {
-      // utilizar la función getFilePath para obterner la futa de la imagen del avatar
-      const imagePath = getFilePath(req.files.avatar);
-      userData.avatar = imagePath; // crear la propiedad avatar, en "userData" y asignarle la ruta de la imagen como valor
-    }
+    // if (req.files.avatar) {
+    //   // utilizar la función getFilePath para obterner la futa de la imagen del avatar
+    //   const imagePath = getFilePath(req.files.avatar);
+    //   userData.avatar = imagePath; // crear la propiedad avatar, en "userData" y asignarle la ruta de la imagen como valor
+    // }
     // buscar y acualizar el usuario en la base de datos
     const myUserUpdated = await User.findByIdAndUpdate(userId, userData, { new: true });
     if (!myUserUpdated) throw boom.badRequest(); // si "myUserUpdated" es falsy, devolver el error
@@ -91,7 +91,7 @@ async function updateMyUser (req, res) {
   } catch (error) {
     error.isBoom // preguntar si el error es enviado por Boom
       ? res.status(error.output.statusCode).json({ error, message: error.message })
-      : res.status(400).json({ message: 'Bad request', error });
+      : res.status(400).json({ message: 'Bad request', error: error.message });
   }
 }
 
