@@ -55,7 +55,8 @@ async function getAll (req, res) {
 
     if (!arrayChats) throw boom.notFound();
 
-    res.status(200).json(arrayChats);
+    const chatsWithMessages = arrayChats.filter(chat => chat.last_message_date !== null);
+    res.status(200).json(chatsWithMessages);
   } catch (error) {
     error.isBoom // preguntar si el error es enviado por Boom
       ? res.status(error.output.statusCode).json({ error, message: error.message })
