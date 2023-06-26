@@ -25,6 +25,12 @@ router.get(
   MessageController.getLastMessage
 );
 
+router.get(
+  '/chat/messages/unread/:chat_id',
+  [mdAuth.asureAuth, mdUpload],
+  MessageController.getUnreadMessages
+);
+
 router.post(
   '/chat/messages',
   [mdAuth.asureAuth],
@@ -35,6 +41,12 @@ router.post(
   '/chat/messages/image',
   [mdAuth.asureAuth, mdUpload],
   MessageController.sendImage
+);
+
+router.patch(
+  '/chat/messages/:id',
+  [mdAuth.asureAuth, mdUpload],
+  MessageController.updateReadMessage
 );
 
 export const messageRoutes = router;

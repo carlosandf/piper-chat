@@ -11,6 +11,10 @@ const MessageSchema = new Schema(
       ref: 'User'
     },
     message: String,
+    read: {
+      type: Boolean,
+      default: false
+    },
     type: {
       type: String,
       enum: ['TEXT', 'IMAGE']
@@ -21,4 +25,4 @@ const MessageSchema = new Schema(
   }
 );
 
-export const Message = model('Message', MessageSchema);
+export const Message = model('Chat_message', MessageSchema);
