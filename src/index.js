@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-import { server, io } from './app.js';
+import { server } from './app.js';
+import { io } from './utils/socketServer.js';
 import { IP_SERVER, PORT, MONGO_URI } from './constants.js';
 
 mongoose.connect(MONGO_URI, { useNewUrlParser: true })

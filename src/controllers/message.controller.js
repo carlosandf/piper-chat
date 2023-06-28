@@ -1,5 +1,5 @@
 import { Message } from '../models/index.js';
-import { io } from '../app.js';
+import { io } from '../utils/socketServer.js';
 import { getFilePath } from '../utils/index.js';
 
 async function sendMessage (req, res) {
@@ -16,10 +16,22 @@ async function sendMessage (req, res) {
 
     const savedMessage = await (await newMessage.save()).populate('user');
 
+    console.log({ savedMessage });
+
     io.sockets.in(chat_id).emit('message', savedMessage);
     io.sockets.in(`${chat_id}_notify`).emit('message_notify', savedMessage);
 
     res.status(200).json(savedMessage);
+
+    const unreadMessages = await Message.find({
+      chat: chat_id,
+      read: false,
+      user: { $ne: userId }
+    });
+
+    for await (const item of unreadMessages) {
+      await Message.findByIdAndUpdate(item.id, { read: true });
+    }
   } catch (error) {
     res.status(400).send({ message: 'Ha ocurrido un error', error: error.message });
   }
@@ -92,16 +104,19 @@ async function getLastMessage (req, res) {
 
 async function updateReadMessage (req, res) {
   try {
-    const { id: message_id } = req.params;
+    const { chat_id } = req.params;
     const { userId } = req.user;
 
     const read = true;
-    const lastMessage = await Message.findById(message_id);
+    const lastMessage = await Message.findOne({ chat: chat_id })
+      .sort({
+        createdAt: -1
+      });
+
     if (lastMessage?.user.toJSON() === userId) {
       return res.status(300).send({ message: 'redirect' });
     }
-    const message = await Message.findByIdAndUpdate(message_id, { read });
-    const chat_id = message.chat.toJSON();
+
     io.sockets.in(chat_id).emit('read', { read });
 
     const unreadMessages = await Message.find({
@@ -114,7 +129,7 @@ async function updateReadMessage (req, res) {
       await Message.findByIdAndUpdate(item.id, { read });
     }
 
-    res.status(200).send({ read, message });
+    res.status(200).send({ read, message: 'Mensajes leidos' });
   } catch (error) {
     res.status(500).send({
       error: 'Error en el servidor',

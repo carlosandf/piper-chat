@@ -15,7 +15,7 @@ import {
 
 const app = express(); // iniciar una app de express
 const server = http.createServer(app); // crear un servidor http y pasarle la app de express
-const io = initSocketServer(server); // inicializar el servidor socket
+initSocketServer(server); // inicializar el servidor socket
 
 /*
   express < 4.16.4
@@ -46,4 +46,4 @@ app.use(baseUrl, groupRoutes);
 app.use(baseUrl, groupMessageRouter);
 
 // exportar el servidor http y el y el servidor de socket.io
-export { server, io };
+export { server };

@@ -1,6 +1,6 @@
 import { GroupMessage } from '../models/index.js';
 import { getFilePath } from '../utils/index.js';
-import { io } from '../app.js';
+import { io } from '../utils/socketServer.js';
 
 async function sendText (req, res) {
   const { group_id, message } = req.body;
