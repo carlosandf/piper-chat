@@ -44,9 +44,9 @@ router.post(
 );
 
 router.patch(
-  '/chat/messages/:chat_id',
+  '/chat/messages/update/:chat_id',
   [mdAuth.asureAuth, mdUpload],
-  MessageController.updateReadMessage
+  MessageController.updateReadMessages
 );
 
 export const messageRoutes = router;

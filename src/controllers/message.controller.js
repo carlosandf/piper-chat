@@ -16,22 +16,10 @@ async function sendMessage (req, res) {
 
     const savedMessage = await (await newMessage.save()).populate('user');
 
-    console.log({ savedMessage });
-
     io.sockets.in(chat_id).emit('message', savedMessage);
     io.sockets.in(`${chat_id}_notify`).emit('message_notify', savedMessage);
 
     res.status(200).json(savedMessage);
-
-    const unreadMessages = await Message.find({
-      chat: chat_id,
-      read: false,
-      user: { $ne: userId }
-    });
-
-    for await (const item of unreadMessages) {
-      await Message.findByIdAndUpdate(item.id, { read: true });
-    }
   } catch (error) {
     res.status(400).send({ message: 'Ha ocurrido un error', error: error.message });
   }
@@ -102,7 +90,7 @@ async function getLastMessage (req, res) {
   }
 }
 
-async function updateReadMessage (req, res) {
+async function updateReadMessages (req, res) {
   try {
     const { chat_id } = req.params;
     const { userId } = req.user;
@@ -117,7 +105,7 @@ async function updateReadMessage (req, res) {
       return res.status(300).send({ message: 'redirect' });
     }
 
-    io.sockets.in(chat_id).emit('read', { read });
+    io.sockets.in(`${chat_id}_read_notify`).emit('read_notify', { read });
 
     const unreadMessages = await Message.find({
       chat: chat_id,
@@ -148,7 +136,7 @@ async function getUnreadMessages (req, res) {
       read: false,
       user: { $ne: userId }
     }).count();
-    res.status(200).send(JSON.stringify(unreadMessages));
+    res.status(200).send({ totalUnread: unreadMessages });
   } catch (error) {
     res.status(500).send({ message: 'Server error', error: error.message });
   }
@@ -156,7 +144,7 @@ async function getUnreadMessages (req, res) {
 
 export const MessageController = {
   getUnreadMessages,
-  updateReadMessage,
+  updateReadMessages,
   getTotalMessages,
   getLastMessage,
   getMessages,
