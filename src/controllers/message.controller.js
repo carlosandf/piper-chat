@@ -105,7 +105,7 @@ async function updateReadMessages (req, res) {
       return res.status(300).send({ message: 'redirect' });
     }
 
-    io.sockets.in(`${chat_id}_read_notify`).emit('read_notify', { read });
+    io.sockets.in(`${chat_id}_read_notify`).emit('read_notify', { read, chat_id });
 
     const unreadMessages = await Message.find({
       chat: chat_id,
