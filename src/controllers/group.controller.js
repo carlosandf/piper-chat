@@ -163,8 +163,9 @@ async function removeParticipant (req, res) {
   const newParticipants = group.participants.filter(
     participant => participant.toString() !== user_id
   );
+
   const newData = {
-    ...group.$getPopulatedDocs_doc,
+    ...group._doc,
     participants: newParticipants
   };
 
