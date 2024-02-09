@@ -32,4 +32,11 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true })
         });
       });
     });
+  })
+  .catch(err => {
+    if (err.code && err.code === 'ECONNREFUSED') {
+      console.log('----------------------------------------------');
+      console.log('| ERROR: No hay conexión a internet          |');
+      console.log('----------------------------------------------');
+    }
   });
