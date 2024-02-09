@@ -79,7 +79,7 @@ async function updateMyUser (req, res) {
       Estas propiedade son generadas por el middleware de multiparty
     */
     // if (req.files.avatar) {
-    //   // utilizar la función getFilePath para obterner la futa de la imagen del avatar
+    //   // utilizar la función getFilePath para obterner la ruta de la imagen del avatar
     //   const imagePath = getFilePath(req.files.avatar);
     //   userData.avatar = imagePath; // crear la propiedad avatar, en "userData" y asignarle la ruta de la imagen como valor
     // }
