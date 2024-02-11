@@ -38,5 +38,7 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true })
       console.log('----------------------------------------------');
       console.log('| ERROR: No hay conexión a internet          |');
       console.log('----------------------------------------------');
+    } else {
+      console.error(err);
     }
   });
